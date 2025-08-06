@@ -1,0 +1,15 @@
+/Users/mohebbis/Desktop/Individual Software Project/ConsoleApp2/ISP/bin/Debug/net9.0/ISP
+/Users/mohebbis/Desktop/Individual Software Project/ConsoleApp2/ISP/bin/Debug/net9.0/ISP.deps.json
+/Users/mohebbis/Desktop/Individual Software Project/ConsoleApp2/ISP/bin/Debug/net9.0/ISP.runtimeconfig.json
+/Users/mohebbis/Desktop/Individual Software Project/ConsoleApp2/ISP/bin/Debug/net9.0/ISP.dll
+/Users/mohebbis/Desktop/Individual Software Project/ConsoleApp2/ISP/bin/Debug/net9.0/ISP.pdb
+/Users/mohebbis/Desktop/Individual Software Project/ConsoleApp2/ISP/obj/Debug/net9.0/ISP.GeneratedMSBuildEditorConfig.editorconfig
+/Users/mohebbis/Desktop/Individual Software Project/ConsoleApp2/ISP/obj/Debug/net9.0/ISP.AssemblyInfoInputs.cache
+/Users/mohebbis/Desktop/Individual Software Project/ConsoleApp2/ISP/obj/Debug/net9.0/ISP.AssemblyInfo.cs
+/Users/mohebbis/Desktop/Individual Software Project/ConsoleApp2/ISP/obj/Debug/net9.0/ISP.csproj.CoreCompileInputs.cache
+/Users/mohebbis/Desktop/Individual Software Project/ConsoleApp2/ISP/obj/Debug/net9.0/ISP.sourcelink.json
+/Users/mohebbis/Desktop/Individual Software Project/ConsoleApp2/ISP/obj/Debug/net9.0/ISP.dll
+/Users/mohebbis/Desktop/Individual Software Project/ConsoleApp2/ISP/obj/Debug/net9.0/refint/ISP.dll
+/Users/mohebbis/Desktop/Individual Software Project/ConsoleApp2/ISP/obj/Debug/net9.0/ISP.pdb
+/Users/mohebbis/Desktop/Individual Software Project/ConsoleApp2/ISP/obj/Debug/net9.0/ISP.genruntimeconfig.cache
+/Users/mohebbis/Desktop/Individual Software Project/ConsoleApp2/ISP/obj/Debug/net9.0/ref/ISP.dll

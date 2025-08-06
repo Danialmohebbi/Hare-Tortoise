@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using ConsoleApp2.Player;
 using ConsoleApp2.Squares;
 
@@ -91,6 +93,7 @@ namespace ConsoleApp2.Extensions
 
             for (int i = players.Count - 1, j = 0; i >= 0; i--, j++)
             {
+                Console.WriteLine($"{i+1}");
                 players[j].Rank = i + 1;
             }
         }

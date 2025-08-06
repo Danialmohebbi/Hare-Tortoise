@@ -8,7 +8,7 @@ public class PlayerBase
     public PlayerColor Color { get; init; }
     public bool RequiredToMove { get; set; }
     public int Carrots { get; set; }
-    public int Rank { get; set; }
+    public int Rank { get; set; } = 0;
     public int Lettuce { get; set; }
     public bool SkipRound { get; set; }
     public bool TakeCarrots { get; set; }

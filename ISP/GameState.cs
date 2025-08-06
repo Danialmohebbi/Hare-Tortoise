@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using ConsoleApp2.Player;
 using ConsoleApp2.Squares;
 
@@ -16,7 +18,7 @@ public class GameState
     public GameState(int NumberOfPlayers)
     {
         InitializeBoard();
-        InitializePlayers(NumberOfPlayers - 1);
+        InitializePlayers(NumberOfPlayers);
         
     }
 
@@ -97,7 +99,7 @@ public class GameState
         if (Players.Count > 0)
             return;
 
-        for (int p = 0; p < NumberOfPlayers; p++)
+        for (int p = 1; p <= NumberOfPlayers; p++)
         {
             Players.Add(new PlayerBase((PlayerColor)p)
                 {
@@ -105,12 +107,6 @@ public class GameState
                 }
                 );
         }
-        var player = new PlayerBase(PlayerColor.Red)
-        {
-            Carrots = 65,
-            Rank = 1
-        };
-        Players.Add(player);
     }
 
     
