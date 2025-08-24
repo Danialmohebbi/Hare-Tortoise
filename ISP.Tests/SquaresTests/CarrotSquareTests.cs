@@ -1,5 +1,4 @@
 using ConsoleApp2;
-using ConsoleApp2.Extensions;
 using ConsoleApp2.Player;
 using ConsoleApp2.Squares;
 using Xunit;
@@ -22,11 +21,11 @@ public class CarrotSquareTests
     [InlineData(58,0)]
     public void MoveToCarrotSquare_ReturnsCorrectSquareIndex(int SquareTargetIndex, int ExpectedTargetIndex)
     {
-        GameState gameState = new GameState(1);
-        PlayerBase player = gameState.Players[gameState.TurnIndex];
+        Game state = new Game(1);
+        PlayerBase player = state.Players[state.TurnIndex];
         player.Rank = 1;
         
-        gameState.ApplyMove(new Move { SqureTargetIndex = SquareTargetIndex });
+        state.Move(new Move { SqureTargetIndex = SquareTargetIndex });
         
         Assert.Equal(ExpectedTargetIndex, player.CurrentSquare);
     }
@@ -45,14 +44,14 @@ public class CarrotSquareTests
     [InlineData(58,0)]
     public void MoveToCarrotSquare_ReturnsCorrectSquareType(int SquareTargetIndex, int ExpectedTargetIndex)
     {
-        GameState gameState = new GameState(1);
-        PlayerBase player = gameState.Players[gameState.TurnIndex];
+        Game state = new Game(1);
+        PlayerBase player = state.Players[state.TurnIndex];
         player.Rank = 1;
         player.Carrots = 1_000_000;
         
-        gameState.ApplyMove(new Move { SqureTargetIndex = SquareTargetIndex });
+        state.Move(new Move { SqureTargetIndex = SquareTargetIndex });
         
-        Assert.IsAssignableFrom<CarrotSquare>(gameState.Board[player.CurrentSquare]);
+        Assert.IsAssignableFrom<CarrotSquare>(state.Board[player.CurrentSquare]);
     }
 
     
@@ -65,13 +64,13 @@ public class CarrotSquareTests
     [InlineData(58,64)]
     public void MoveAfterCarrotSquare_ReturnsCorrectCarrotAmount(int BeginningSquareIndex,int TargetCarrotAmount)
     {
-        GameState gameState = new GameState(1);
-        PlayerBase player = gameState.Players[gameState.TurnIndex];
+        Game state = new Game(1);
+        PlayerBase player = state.Players[state.TurnIndex];
         player.Rank = 1;
         player.CurrentSquare = BeginningSquareIndex;
-        gameState.Board[BeginningSquareIndex].Player = player;
+        state.Board[BeginningSquareIndex].Player = player;
         
-        gameState.ApplyMove(new Move { SqureTargetIndex = BeginningSquareIndex + 1 });
+        state.Move(new Move { SqureTargetIndex = BeginningSquareIndex + 1 });
         
         Assert.Equal(TargetCarrotAmount, player.Carrots);
     }
