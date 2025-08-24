@@ -2,8 +2,8 @@ namespace ConsoleApp2.Player;
 
 public enum PlayerColor
 {
-    Red = 1,
-    Blue = 2,
-    Yellow = 3,
-    Orange = 4,
+    R = 1,
+    B = 2,
+    Y = 3,
+    O = 4,
 }

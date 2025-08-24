@@ -92,7 +92,7 @@ public class Game
 
 
         if (player.RequiredToMove && !movingAway)
-            throw new Exception();
+            return false;
 
         int move = int.Abs(player.CurrentSquare - squareTargetIndex);
         if (player.CurrentSquare == 0)
@@ -122,7 +122,8 @@ public class Game
             }
 
             if (currentSquare.GetType() == typeof(HareSquare)
-                || currentSquare.GetType() == typeof(TortoiseSquare))
+                || currentSquare.GetType() == typeof(TortoiseSquare)
+                || currentSquare.GetType() == typeof(FinalSquare))
                 player.ExecuteCommand();
             UpdateRank();
             return true;

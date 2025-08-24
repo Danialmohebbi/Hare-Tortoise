@@ -12,11 +12,17 @@ public class FinalSquare : Square
     }
     public override string ToString()
     {
-        return $"[{Player} Final Square ]";
-    }
+        string s = Player != null ? "." : $"{Player.Color}";
+        return $"[F,{s}]";    }
 
     public override Command GetCommand(Game state)
     {
-        return null;
+        return new FinalSquareAction();
+    }
+    private class FinalSquareAction : Command
+    {
+        public Game State { get; set; }
+
+        public void Execute(PlayerBase player) => player.Won = true;
     }
 }
