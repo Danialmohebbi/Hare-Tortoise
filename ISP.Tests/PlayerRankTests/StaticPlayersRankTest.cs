@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using ConsoleApp2;
-using ConsoleApp2.Extensions;
+using ConsoleApp2;
 using ConsoleApp2.Player;
 using Xunit;
 
 namespace ISP.Tests.PlayerRankTests;
 
-public class StaticBoardRankTest
+public class StaticPlayersRankTest
 {
     private static int PlayerNotPlaying = -1;
     private static int PlayerNotPlayingRank = 0;
-    public static IEnumerable<object[]> StaticBoardRankTestData => new List<object[]>
+    public static IEnumerable<object[]> StaticPlayersRankTestData => new List<object[]>
     {
         new object[] { new int[] { 0, 1, 2, 3 }, new int[] { 4, 3, 2, 1 } },
         new object[] { new int[] { 5, 1, 2, 10 }, new int[] { 2, 4, 3, 1 } },
@@ -22,16 +22,16 @@ public class StaticBoardRankTest
     };
     
     [Theory]
-    [MemberData(nameof(StaticBoardRankTestData))]
-    public void StaticBoardRank_ShouldReturnCorrectValue(int[] playerSquares, int[] ExpectedRanks)
+    [MemberData(nameof(StaticPlayersRankTestData))]
+    public void StaticplayerRank_ShouldReturnCorrectValue(int[] playerSquares, int[] ExpectedRanks)
     {
-        GameState gameState = new GameState(NumberOfPlayers : 4);
+        Game state = new Game(NumberOfPlayers : 4);
         for (int i = 0; i < 4; i++)
-            gameState.Board[playerSquares[i]].Player = gameState.Players[i];
+            state.Board[playerSquares[i]].Player = state.Players[i];
         
-        GameStateExtension.UpdateRank(gameState);
+        state.UpdateRank();
         List<int> playersRank = new();
-        foreach (PlayerBase p in gameState.Players)
+        foreach (PlayerBase p in state.Players)
             playersRank.Add(p.Rank);
         
         Assert.Equal(ExpectedRanks, playersRank.ToArray());
@@ -51,14 +51,14 @@ public class StaticBoardRankTest
     [MemberData(nameof(NotAllPlayersRankTestData))]
     public void NotAllPlayersRank_ShouldReturnCorrectValue(int[] playerSquares, int[] ExpectedRanks)
     {
-        GameState gameState = new GameState(NumberOfPlayers : 4);
+        Game state = new Game(NumberOfPlayers : 4);
         for (int i = 0; i < 4; i++)
             if (playerSquares[i] != PlayerNotPlaying)
-                gameState.Board[playerSquares[i]].Player = gameState.Players[i];
+                state.Board[playerSquares[i]].Player = state.Players[i];
         
-        GameStateExtension.UpdateRank(gameState);
+        state.UpdateRank();
         List<int> playersRank = new();
-        foreach (PlayerBase p in gameState.Players)
+        foreach (PlayerBase p in state.Players)
             playersRank.Add(p.Rank);
         
         Assert.Equal(ExpectedRanks, playersRank.ToArray());

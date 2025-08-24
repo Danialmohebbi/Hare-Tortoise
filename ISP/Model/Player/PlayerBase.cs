@@ -15,6 +15,11 @@ public class PlayerBase
     public int CarrotsUsedLastTurn { get; set; }
     public bool Won { get; set; }
 
+    public virtual Move move(Game game)
+    {
+        throw new NotImplementedException();
+    }
+
     public int CurrentSquare { get; set; } = 0;
     private Command command = null;
 
@@ -38,6 +43,22 @@ public class PlayerBase
     public override string ToString()
     {
         return $"{Color} Player" ;
+    }
+
+    public PlayerBase Clone()
+    {
+        PlayerBase clone = new PlayerBase(Color);
+        clone.RequiredToMove = RequiredToMove;
+        clone.Carrots = Carrots;
+        clone.Rank = Rank;
+        clone.Lettuce = Lettuce;
+        clone.TakeCarrots = TakeCarrots;
+        clone.SkipRound = SkipRound;
+        clone.Won = Won;
+        clone.CurrentSquare = CurrentSquare;
+        clone.command = command;
+        clone.CarrotsUsedLastTurn = CarrotsUsedLastTurn;
+        return clone;
     }
     
 }

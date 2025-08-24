@@ -4,22 +4,29 @@ namespace ConsoleApp2.Squares;
 
 public class LettuceSquare : Square
 {
+    public override Square Clone()
+    {
+        LettuceSquare clone= new LettuceSquare();
+        clone.Player = Player;
+        return clone;
+    }
+
     public override string ToString()
     {
         return $"[{Player} Lettuce Square ]";
     }
 
-    public override Command GetCommand(GameState gameState)
+    public override Command GetCommand(Game state)
     {
         Command cmd = new LettuceSquareAction();
-        cmd.GameState = gameState;
+        cmd.State = state;
         return cmd;
     }
     private class LettuceSquareAction : Command
     {
         
         private int CarrotsRequired = 10;
-        public GameState GameState { get; set; }
+        public Game State { get; set; }
 
         public void Execute(PlayerBase player)
         {
