@@ -13,8 +13,8 @@ public class TortoiseSquare : Square
     }
     public override string ToString()
     {
-        return $"[{Player} Tortoise Square ]";
-    }
+        string s = Player == null ? "." : $"{Player.Color}";
+        return $"[T,{s}]";    }
 
     public override Command GetCommand(Game state)
     {

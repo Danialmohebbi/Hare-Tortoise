@@ -21,6 +21,7 @@ public class PlayerBase
     }
 
     public int CurrentSquare { get; set; } = 0;
+    
     private Command command = null;
 
     public void ExecuteCommand()

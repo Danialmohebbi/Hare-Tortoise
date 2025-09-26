@@ -13,7 +13,8 @@ public class LettuceSquare : Square
 
     public override string ToString()
     {
-        return $"[{Player} Lettuce Square ]";
+        string s = Player == null ? "." : $"{Player.Color}";
+        return $"[L,{s}]";
     }
 
     public override Command GetCommand(Game state)

@@ -12,7 +12,7 @@ public class FinalSquare : Square
     }
     public override string ToString()
     {
-        string s = Player != null ? "." : $"{Player.Color}";
+        string s = Player == null ? "." : $"{Player.Color}";
         return $"[F,{s}]";    }
 
     public override Command GetCommand(Game state)

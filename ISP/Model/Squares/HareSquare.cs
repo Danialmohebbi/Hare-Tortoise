@@ -25,8 +25,8 @@ public class HareSquare : Square
     }
     public override string ToString()
     {
-        return $"[{Player} Hare Square ]";
-    }
+        string s = Player == null ? "." : $"{Player.Color}";
+        return $"[H,{s}]";    }
 
     public override Command GetCommand(Game state)
     {

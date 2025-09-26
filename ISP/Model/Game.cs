@@ -69,6 +69,7 @@ public class Game
         Square targetSquare = Board[squareTargetIndex];
         bool EatCarrots = _move.EatCarrots;
         bool movingAway = player.CurrentSquare != squareTargetIndex;
+        
 
         if (player.SkipRound)
         {

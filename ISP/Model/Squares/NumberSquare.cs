@@ -18,8 +18,8 @@ public class NumberSquare : Square
     }
     public override string ToString()
     {
-        return $"[{Player} Number Square ({Number}) ]" ;
-    }
+        string s = Player == null ? "." : $"{Player.Color}";
+        return $"[N,{s}]";    }
 
     public override Command GetCommand(Game state)
     {
