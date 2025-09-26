@@ -63,10 +63,12 @@ public class Game
 
     public bool Move(Move _move)
     { 
+        
         var player = Players[TurnIndex];
-        Square currentSquare = Board[player.CurrentSquare];
+        Console.WriteLine(player.Color);
+        Square currentSquare = player.CurrentSquare == -1 ? null : Board[player.CurrentSquare-1];
         int squareTargetIndex = _move.SqureTargetIndex;
-        Square targetSquare = Board[squareTargetIndex];
+        Square targetSquare = Board[squareTargetIndex-1];
         bool EatCarrots = _move.EatCarrots;
         bool movingAway = player.CurrentSquare != squareTargetIndex;
         
@@ -77,14 +79,14 @@ public class Game
             return true;
         }
 
-        if (currentSquare.GetType() == typeof(NumberSquare) && movingAway)
+        if (currentSquare != null && currentSquare.GetType() == typeof(NumberSquare) && movingAway)
             player.ExecuteCommand();
-        else if (currentSquare.GetType() == typeof(LettuceSquare) && !player.RequiredToMove)
+        else if (currentSquare != null && currentSquare.GetType() == typeof(LettuceSquare) && !player.RequiredToMove)
         {
             player.ExecuteCommand();
             return true;
         }
-        else if (currentSquare.GetType() == typeof(CarrotSquare) && !movingAway)
+        else if (currentSquare != null && currentSquare.GetType() == typeof(CarrotSquare) && !movingAway)
         {
             player.TakeCarrots = EatCarrots && player.CurrentSquare >= 6 ? false : true;
             player.ExecuteCommand();
@@ -95,8 +97,8 @@ public class Game
         if (player.RequiredToMove && !movingAway)
             return false;
 
-        int move = int.Abs(player.CurrentSquare - squareTargetIndex);
-        if (player.CurrentSquare == 0)
+        int move = int.Abs((player.CurrentSquare == -1 ? 0 : player.CurrentSquare ) - squareTargetIndex);
+        if (player.CurrentSquare == -1)
             move++;
         int cost = (move * (move + 1)) / 2;
         if (player.Carrots >= cost && movingAway)
@@ -114,17 +116,20 @@ public class Game
             else
             {
                 player.Carrots -= cost;
-                currentSquare.Player = null;
+                if (currentSquare != null)
+                {
+                    Console.WriteLine(currentSquare.ToString());
+                    Console.WriteLine("helo"); currentSquare.Player = null;}
                 player.CurrentSquare = squareTargetIndex;
                 targetSquare.Player = player;
                 player.SetCommand(targetSquare.GetCommand(this));
                 player.RequiredToMove = false;
                 player.CarrotsUsedLastTurn = cost;
             }
-
-            if (currentSquare.GetType() == typeof(HareSquare)
-                || currentSquare.GetType() == typeof(TortoiseSquare)
-                || currentSquare.GetType() == typeof(FinalSquare))
+            
+            if (currentSquare != null && (currentSquare.GetType() == typeof(HareSquare)
+                                      || currentSquare.GetType() == typeof(TortoiseSquare)
+                                      || currentSquare.GetType() == typeof(FinalSquare)))
                 player.ExecuteCommand();
             UpdateRank();
             return true;
@@ -143,7 +148,9 @@ public class Game
 
         for (int i = players.Count - 1, j = 0; i >= 0; i--, j++)
             players[j].Rank = i + 1;
+
     }
+    
 
     public int? Winner()
     {
@@ -224,12 +231,9 @@ public class Game
 
     public void InitializePlayers(int NumberOfPlayers)
     {
-        if (Players.Count > 0)
-            return;
 
         for (int p = 1; p <= NumberOfPlayers; p++)
-        {
-            Players.Add(new PlayerBase((PlayerColor)p)
+        { Players.Add(new PlayerBase((PlayerColor)p)
                 {
                     Carrots = 65
                 }
