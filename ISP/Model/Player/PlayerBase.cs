@@ -20,7 +20,7 @@ public class PlayerBase
         throw new NotImplementedException();
     }
 
-    public int CurrentSquare { get; set; } = 0;
+    public int CurrentSquare { get; set; } = -1;
     
     private Command command = null;
 
