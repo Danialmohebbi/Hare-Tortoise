@@ -145,9 +145,19 @@ public class Game
         foreach (var square in Board)
             if (square.Player != null)
                 players.Add(square.Player);
-
+        int Rank = 1;
+        HashSet<PlayerBase> RankedPlayers = new();
         for (int i = players.Count - 1, j = 0; i >= 0; i--, j++)
-            players[j].Rank = i + 1;
+        {
+            RankedPlayers.Add(players[j]);
+            players[j].Rank = Rank++;
+        }
+
+        // foreach (PlayerBase p in Players)
+        // {
+        //     if (!RankedPlayers.Contains(p))
+        //         p.Rank = Rank++;
+        // }
 
     }
     
@@ -235,7 +245,8 @@ public class Game
         for (int p = 1; p <= NumberOfPlayers; p++)
         { Players.Add(new PlayerBase((PlayerColor)p)
                 {
-                    Carrots = 65
+                    Carrots = 65,
+                    Lettuce = 3
                 }
                 );
         }

@@ -20,12 +20,8 @@ class Program
 
     static void Main(string[] args)
     {
-        Game game = new Game(4);
-        game.Move(new Move { SqureTargetIndex = 10 });
-        game.Move(new Move { SqureTargetIndex = 2 });
-        View.View v = new View.View(){g = game };
-        v.Draw();
-
+        Controller c = new Controller(new Game(2));
+        c.Run();
 
     }
     

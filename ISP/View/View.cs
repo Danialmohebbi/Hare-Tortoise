@@ -80,4 +80,16 @@ public class View
         for (int i =22; i <= 43; i++)
             Console.Write(g.Board[i].ToString());
     }
+
+    public void DrawPrefix()
+    {
+        Console.WriteLine($"Current Player: {g.Players[g.TurnIndex]} - Carrots: " +
+                          $"{g.Players[g.TurnIndex].Carrots}" + 
+                          $" - Lettuce: {g.Players[g.TurnIndex].Lettuce}");
+    }
+
+    public void DrawPostfix()
+    {
+        Console.WriteLine("---------------------------------------------------");
+    }
 }
