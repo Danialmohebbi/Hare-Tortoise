@@ -63,7 +63,8 @@ public class Game
 
     public bool Move(Move _move)
     { 
-        
+        if (Occupied(_move.SqureTargetIndex))
+            return false;
         var player = Players[TurnIndex];
         Console.WriteLine(player.Color);
         Square currentSquare = player.CurrentSquare == -1 ? null : Board[player.CurrentSquare-1];
@@ -250,5 +251,15 @@ public class Game
                 }
                 );
         }
+    }
+
+    private bool Occupied(int Square)
+    {
+        foreach (PlayerBase p in Players)
+        {
+            if (p.CurrentSquare == Square)
+                return true;
+        }
+        return false;
     }
 }
