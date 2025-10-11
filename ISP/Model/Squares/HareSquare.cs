@@ -41,6 +41,10 @@ public class HareSquare : Square
         int randomized;
         do
         {
+            if (Cards.All(kv => kv.Count == 0))
+            {
+                return null;
+            }
             randomized = rnd.Next(0, Cards.Count);
         } while (Cards[randomized].Count == 0);
 
@@ -63,8 +67,11 @@ public class HareSquare : Square
 
         public  void Execute(PlayerBase player)
         {
-            _card.SetPlayer(player);
-            _card.Execute(State);
+            if (_card != null)
+            {
+                _card.SetPlayer(player);
+                _card.Execute(State);
+            }
         }
     }
 }

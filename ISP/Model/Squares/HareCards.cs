@@ -34,12 +34,15 @@ public class Card1 : HareCard
 
     public void Execute(Game state)
     {
+        Console.WriteLine("Hare Card 1 Trigged");
         foreach (var player in state.Players)
         {
             if (player.Rank == 0)
                 continue;
             if (player.Rank < _player.Rank)
                 player.Carrots += 10;
+            Console.WriteLine(player.Carrots);
+
         }
     }
     
@@ -57,6 +60,8 @@ public class Card2 : HareCard
 
     public void Execute(Game state)
     {
+        Console.WriteLine("Hare Card 2 Trigged");
+
         int behindPlayer = state.Players.FindAll(p => p.Rank < _player.Rank && p.Rank != 0).Count;
         int afterPlayer = state.Players.FindAll(p => p.Rank > _player.Rank && p.Rank != 0).Count;
         if (behindPlayer < afterPlayer)
@@ -78,6 +83,7 @@ public class Card3 : HareCard
 
     public void Execute(Game state)
     {
+        Console.WriteLine("Hare Card 3 Trigged");
         if (_player.Carrots != 0)
             _player.Carrots /= 2;
     }
@@ -85,6 +91,7 @@ public class Card3 : HareCard
 
 public class Card4 : HareCard
 {
+
     public PlayerBase _player { get; set; }
 
     public void SetPlayer(PlayerBase player)
@@ -94,6 +101,7 @@ public class Card4 : HareCard
 
     public void Execute(Game state)
     {
+        Console.WriteLine("Hare Card 4 Trigged");
         _player.Carrots = 65;
     }
 }
@@ -109,6 +117,7 @@ public class Card5 : HareCard
 
     public void Execute(Game state)
     {
+        Console.WriteLine("Hare Card 5 Trigged");
         _player.Carrots += _player.CarrotsUsedLastTurn;
         _player.CarrotsUsedLastTurn = 0;
     }
@@ -125,6 +134,7 @@ public class Card6 : HareCard
 
     public void Execute(Game state)
     {
+        Console.WriteLine("Hare Card 6 Trigged");
         if (_player.Lettuce > 0)
             _player.Carrots += _player.Lettuce * 10;
         else
@@ -143,6 +153,7 @@ public class Card7 : HareCard
 
     public void Execute(Game state)
     {
+        Console.WriteLine("Hare Card 7 Trigged");
         foreach (PlayerBase player in state.Players)
         {
             _player.Carrots += 2;
@@ -162,6 +173,7 @@ public class Card8 : HareCard
 
     public void Execute(Game state)
     {
+        Console.WriteLine("Hare Card 8 Trigged");
         List<int> squares = state.GetSquareIndexes(new CarrotSquare());
         IEnumerable<int> wantedSquares = from s in squares
             where state.Board[s].Player == null && s > _player.CurrentSquare

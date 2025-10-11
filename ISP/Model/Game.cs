@@ -75,8 +75,9 @@ public class Game
 
 
         if (squareTargetIndex >= Board.Count ||
-            _move.SqureTargetIndex < player.CurrentSquare || _move.SqureTargetIndex < 0)
+            squareTargetIndex < player.CurrentSquare || _move.SqureTargetIndex < 0)
         {
+            Console.WriteLine(squareTargetIndex);
             Console.WriteLine("Please enter a valid number of moves to play");
             return false;
         }
@@ -138,11 +139,13 @@ public class Game
                 player.RequiredToMove = false;
                 player.CarrotsUsedLastTurn = cost;
             }
-            
-            if (currentSquare != null && (currentSquare.GetType() == typeof(HareSquare)
-                                      || currentSquare.GetType() == typeof(TortoiseSquare)
-                                      || currentSquare.GetType() == typeof(FinalSquare)))
+            if ((targetSquare.GetType() == typeof(HareSquare)
+                                          || targetSquare.GetType() == typeof(TortoiseSquare)
+                                          || targetSquare.GetType() == typeof(FinalSquare)))
+            { 
                 player.ExecuteCommand();
+            }
+
             UpdateRank();
             return true;
         }else if (player.Carrots < cost)
