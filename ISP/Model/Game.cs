@@ -63,6 +63,7 @@ public class Game
 
     public bool Move(Move _move)
     { 
+        
         if (Occupied(_move.SqureTargetIndex))
             return false;
         var player = Players[TurnIndex];
@@ -72,6 +73,7 @@ public class Game
         Square targetSquare = Board[squareTargetIndex-1];
         bool EatCarrots = _move.EatCarrots;
         bool movingAway = player.CurrentSquare != squareTargetIndex;
+        Console.WriteLine($"{movingAway} for cur {player.CurrentSquare} and target {squareTargetIndex}");
         
 
         if (player.SkipRound)
@@ -85,6 +87,8 @@ public class Game
         else if (currentSquare != null && currentSquare.GetType() == typeof(LettuceSquare) && !player.RequiredToMove)
         {
             player.ExecuteCommand();
+            if (movingAway)
+                Console.WriteLine("You are not allowed to move while chewwing on food. it's Dangerous!");
             return true;
         }
         else if (currentSquare != null && currentSquare.GetType() == typeof(CarrotSquare) && !movingAway)
@@ -93,10 +97,7 @@ public class Game
             player.ExecuteCommand();
             player.SetCommand(currentSquare.GetCommand(this));
         }
-
-
-        if (player.RequiredToMove && !movingAway)
-            return false;
+        
 
         int move = int.Abs((player.CurrentSquare == -1 ? 0 : player.CurrentSquare ) - squareTargetIndex);
         int cost = (move * (move + 1)) / 2;
@@ -117,8 +118,7 @@ public class Game
                 player.Carrots -= cost;
                 if (currentSquare != null)
                 {
-                    Console.WriteLine(currentSquare.ToString());
-                    Console.WriteLine("helo"); currentSquare.Player = null;}
+                    currentSquare.Player = null;}
                 player.CurrentSquare = squareTargetIndex;
                 targetSquare.Player = player;
                 player.SetCommand(targetSquare.GetCommand(this));

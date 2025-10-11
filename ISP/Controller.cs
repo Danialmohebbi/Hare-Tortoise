@@ -18,7 +18,12 @@ public class Controller
         {
             view.DrawPrefix();
             Move move = GetMove();
-            game.Move(move);
+            while (!game.Move(move))
+            {
+                move = GetMove();
+            }
+
+            ;
             game.TurnIndex = (game.TurnIndex + 1) % game.Players.Count;
             view.Draw();Console.WriteLine();
             view.DrawPostfix();
