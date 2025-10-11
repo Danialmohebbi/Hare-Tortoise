@@ -99,8 +99,6 @@ public class Game
             return false;
 
         int move = int.Abs((player.CurrentSquare == -1 ? 0 : player.CurrentSquare ) - squareTargetIndex);
-        if (player.CurrentSquare == -1)
-            move++;
         int cost = (move * (move + 1)) / 2;
         if (player.Carrots >= cost && movingAway)
         {
@@ -143,22 +141,18 @@ public class Game
     public  void UpdateRank()
     {
         List<PlayerBase> players = new();
+        List<PlayerBase> currentPlayers = new();
         foreach (var square in Board)
             if (square.Player != null)
+            {
                 players.Add(square.Player);
-        int Rank = 1;
-        HashSet<PlayerBase> RankedPlayers = new();
-        for (int i = players.Count - 1, j = 0; i >= 0; i--, j++)
+                currentPlayers.Add(square.Player);
+            }
+        
+        for (int i = currentPlayers.Count , j = 0; i >= 1; i--, j++)
         {
-            RankedPlayers.Add(players[j]);
-            players[j].Rank = Rank++;
+            currentPlayers[j].Rank = i;
         }
-
-        // foreach (PlayerBase p in Players)
-        // {
-        //     if (!RankedPlayers.Contains(p))
-        //         p.Rank = Rank++;
-        // }
 
     }
     
@@ -246,7 +240,7 @@ public class Game
         for (int p = 1; p <= NumberOfPlayers; p++)
         { Players.Add(new PlayerBase((PlayerColor)p)
                 {
-                    Carrots = 65,
+                    Carrots = 1000,
                     Lettuce = 3
                 }
                 );
