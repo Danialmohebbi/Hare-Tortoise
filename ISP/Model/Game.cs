@@ -64,7 +64,6 @@ public class Game
     public bool Move(Move _move)
     {
         var player = Players[TurnIndex];
-        
         int squareTargetIndex = _move.SqureTargetIndex + player.CurrentSquare;
         if (Occupied(squareTargetIndex))
         {
@@ -75,19 +74,17 @@ public class Game
 
 
         if (squareTargetIndex >= Board.Count ||
-            squareTargetIndex < player.CurrentSquare || _move.SqureTargetIndex < 0)
+            squareTargetIndex < player.CurrentSquare && typeof(TortoiseSquare) != Board[squareTargetIndex].GetType() )
         {
             Console.WriteLine(squareTargetIndex);
             Console.WriteLine("Please enter a valid number of moves to play");
             return false;
         }
-
-
+        
         Square currentSquare = player.CurrentSquare == -1 ? null : Board[player.CurrentSquare];
         Square targetSquare = Board[squareTargetIndex];
         bool EatCarrots = _move.EatCarrots;
         bool movingAway = player.CurrentSquare != squareTargetIndex;
-        Console.WriteLine($"{movingAway} for cur {player.CurrentSquare} and target {squareTargetIndex}");
         
 
         if (player.SkipRound)
@@ -112,12 +109,17 @@ public class Game
             player.SetCommand(currentSquare.GetCommand(this));
         }
         
-
+    
         int move = int.Abs((player.CurrentSquare == -1 ? 0 : player.CurrentSquare ) - squareTargetIndex);
         int cost = (move * (move + 1)) / 2;
         if (player.Carrots >= cost && movingAway)
         {
-            if (targetSquare.GetType() == typeof(TortoiseSquare)
+            if (targetSquare.GetType() == typeof(TortoiseSquare) && player.CurrentSquare < squareTargetIndex)
+            {
+                Console.WriteLine("The square you have chosen can only be moved to backwardly!");
+                return false;
+            }
+            if (targetSquare.GetType() == typeof(TortoiseSquare) && player.CurrentSquare > squareTargetIndex
                 && targetSquare.Player == null
                 && squareTargetIndex < player.CurrentSquare)
             {
