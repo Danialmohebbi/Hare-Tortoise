@@ -15,6 +15,9 @@ public class Game
         InitializePlayers(NumberOfPlayers);
         InitializeBoard();
     }
+
+
+
     public List<Move> possibleMoves()
     {
         List<Move> moves = new();
@@ -273,5 +276,15 @@ public class Game
                 return true;
         }
         return false;
+    }
+
+    public int GetNearestTortoiseSquare(int Square)
+    {
+        int index = Board
+            .Select((b, i) => new { b, i })
+            .Where(x => x.b.GetType() == typeof(TortoiseSquare) && x.b.Player == null && x.i < Square)
+            .Select(x => x.i)
+            .OrderByDescending(x => x).FirstOrDefault(-1);
+        return index;
     }
 }
