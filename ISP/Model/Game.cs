@@ -124,7 +124,8 @@ public class Game
             }
             if (targetSquare.GetType() == typeof(TortoiseSquare) && player.CurrentSquare > squareTargetIndex
                 && targetSquare.Player == null
-                && squareTargetIndex < player.CurrentSquare)
+                && squareTargetIndex < player.CurrentSquare
+                && GetNearestTortoiseSquare(player.CurrentSquare) == squareTargetIndex)
             {
                 (targetSquare as TortoiseSquare).SetMoves(move);
                 player.SetCommand(targetSquare.GetCommand(this));
