@@ -174,17 +174,19 @@ public class Card8 : HareCard
     public void Execute(Game state)
     {
         Console.WriteLine("Hare Card 8 Trigged");
-        List<int> squares = state.GetSquareIndexes(new CarrotSquare());
-        IEnumerable<int> wantedSquares = from s in squares
-            where state.Board[s].Player == null && s > _player.CurrentSquare
-                select s;
+        List<int> wantedSquares = new();
+        for (int i = 0; i < state.Board.Count; i++)
+        {
+            var s = state.Board[i];
+            if (s.Player == null && i > _player.CurrentSquare && s.GetType() == typeof(CarrotSquare))
+            {
+                wantedSquares.Add(i);
+            }
+        }
 
         if (wantedSquares.Count() > 0)
         {
-            state.Board[_player.CurrentSquare].Player = null;
-            state.Board[wantedSquares.ElementAt(0)].Player = _player;
-            _player.CurrentSquare = wantedSquares.ElementAt(0);
-            _player.SetCommand(state.Board[wantedSquares.ElementAt(0)].GetCommand(state));
+            state.Move(new Move { SqureTargetIndex = wantedSquares.OrderBy(x => x).First() - _player.CurrentSquare, EatCarrots = false });
         }
 
         

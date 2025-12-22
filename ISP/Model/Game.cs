@@ -68,6 +68,15 @@ public class Game
     {
         var player = Players[TurnIndex];
         int squareTargetIndex = _move.SqureTargetIndex + player.CurrentSquare;
+        bool EatCarrots = _move.EatCarrots;
+        bool movingAway = player.CurrentSquare != squareTargetIndex;
+
+        if (_move.SqureTargetIndex == player.CurrentSquare && _move.EatCarrots)
+        {
+            player.Carrots += 10;
+            return true;
+        }
+        
         if (Occupied(squareTargetIndex))
         {
             Console.WriteLine("The square you have chosen is already occupied!");
@@ -86,8 +95,7 @@ public class Game
         
         Square currentSquare = player.CurrentSquare == -1 ? null : Board[player.CurrentSquare];
         Square targetSquare = Board[squareTargetIndex];
-        bool EatCarrots = _move.EatCarrots;
-        bool movingAway = player.CurrentSquare != squareTargetIndex;
+
         
 
         if (player.SkipRound)

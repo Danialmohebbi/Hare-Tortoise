@@ -16,9 +16,10 @@ public class Controller
     {
         while (game.Winner() == null)
         {
+            Console.WriteLine($"Red Player: {game.Players[0].CurrentSquare}");
             view.DrawPrefix();
             Move move = GetMove();
-            while (!game.Move(move))
+            while (move == null || !game.Move(move))
             {
                 move = GetMove();
             }
@@ -32,20 +33,34 @@ public class Controller
         GameOver();
     }
 
-    public Move GetMove()
+    public Move? GetMove()
     {
+        bool eatCarrots = false;
+        int curPlayerIndex = game.Players[game.TurnIndex].CurrentSquare;
+        if (curPlayerIndex != -1 && game.Board[curPlayerIndex].GetType() == typeof(CarrotSquare))
+        {
+            Console.WriteLine("Do you wish to move?[YES/NO]");
+            string inputEatCarrots = Console.ReadLine()!;
+            if (inputEatCarrots.Equals("YES"))
+            {
+                eatCarrots = false;
+            }else if (inputEatCarrots.Equals("NO"))
+            {
+                eatCarrots = true;
+            }
+            else
+            {
+                return null;
+            }
+            if (eatCarrots)
+            {
+                return new Move { SqureTargetIndex = curPlayerIndex, EatCarrots = eatCarrots };
+            }
+        }
         Console.WriteLine("Please enter the box you wish to move to: ");
         int inputedBoxIndex = int.Parse(Console.ReadLine());
-        if (game.Players[game.TurnIndex].GetType() == typeof(CarrotSquare))
-        {
-            Console.WriteLine("Please enter if you wish to stay and eat some yummy carrots: Y/N ");
-            string inputEatCarrots = Console.ReadLine();
-            bool eatCarrots = inputEatCarrots == null ? false : (inputEatCarrots.Equals("Y") ? true : false);
-            return new Move {EatCarrots = eatCarrots, SqureTargetIndex = inputedBoxIndex};
-        }
         
-        return new Move {SqureTargetIndex = inputedBoxIndex};
-       
+        return new Move {SqureTargetIndex = inputedBoxIndex, EatCarrots = eatCarrots };
     }
     public void GameOver() { }
     
