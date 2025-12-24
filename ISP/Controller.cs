@@ -1,3 +1,4 @@
+using ConsoleApp2.Player;
 using ConsoleApp2.Squares;
 
 namespace ConsoleApp2;
@@ -21,10 +22,14 @@ public class Controller
             Move move = GetMove();
             while (move == null || !game.Move(move))
             {
+                
                 move = GetMove();
             }
 
-            ;
+            if (game.TurnIndex == 1)
+            {
+                Console.WriteLine(move.SqureTargetIndex);
+            }
             game.TurnIndex = (game.TurnIndex + 1) % game.Players.Count;
             view.Draw();Console.WriteLine();
             view.DrawPostfix();
@@ -35,8 +40,17 @@ public class Controller
 
     public Move? GetMove()
     {
+        if (game.Players[game.TurnIndex].IsAi)
+        {
+            Move? move = game.Players[game.TurnIndex].move(game);
+            if (move == null)
+                game.Players[game.TurnIndex] = new RandomPlayer(game.Players[game.TurnIndex].Color) 
+                {Carrots = game.Players[game.TurnIndex].Carrots + 65, Lettuce = game.Players[game.TurnIndex].Lettuce, IsAi = true};
+            return game.Players[game.TurnIndex].move(game);
+        }
         bool eatCarrots = false;
         int curPlayerIndex = game.Players[game.TurnIndex].CurrentSquare;
+        
         if (curPlayerIndex != -1 && game.Board[curPlayerIndex].GetType() == typeof(CarrotSquare))
         {
             Console.WriteLine("Do you wish to move?[YES/NO]");

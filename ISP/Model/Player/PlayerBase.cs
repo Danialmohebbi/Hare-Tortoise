@@ -6,6 +6,7 @@ namespace ConsoleApp2.Player;
 public class PlayerBase
 {
     public PlayerColor Color { get; init; }
+    public bool IsAi { get; set; }
     public bool RequiredToMove { get; set; }
     public int Carrots { get; set; }
     public int Rank { get; set; } = 0;

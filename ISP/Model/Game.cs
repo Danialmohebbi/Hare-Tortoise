@@ -18,32 +18,95 @@ public class Game
 
 
 
-    public List<Move> possibleMoves()
-    {
-        List<Move> moves = new();
-        PlayerBase currentPlayer = Players[TurnIndex];
-        for (int i = 1; i < Board.Count; i++)
-        {
-            int move = currentPlayer.CurrentSquare + i;
-            int cost = (move * (move + 1)) / 2;
-            if (currentPlayer.Carrots >= cost)
-            {
-                moves.Add(new Move { EatCarrots = true,SqureTargetIndex = move });
-                moves.Add(new Move { EatCarrots = false,SqureTargetIndex = move });
-            }
-        }
+public List<Move> possibleMoves()
+{
+    List<Move> moves = new();
+    PlayerBase player = Players[TurnIndex];
 
-        for (int i = currentPlayer.CurrentSquare - 1; i >= 0; i--)
-        {
-            if (Board[i].GetType() == typeof(TortoiseSquare))
-            {
-                moves.Add(new Move { EatCarrots = false, SqureTargetIndex = i });
-            }
-        }
-        
+    int baseSquare = player.CurrentSquare;
+
+    // Skip round → only noop
+    if (player.SkipRound)
+    {
+        moves.Add(new Move { SqureTargetIndex = 0, EatCarrots = false });
         return moves;
     }
-    
+
+    // Eat carrots in place
+    if (baseSquare >= 0 &&
+        Board[baseSquare] is CarrotSquare &&
+        player.Carrots < 6)
+    {
+        moves.Add(new Move { SqureTargetIndex = 0, EatCarrots = true });
+    }
+
+    // Forward moves
+    for (int delta = 1; ; delta++)
+    {
+        int target = baseSquare + delta;
+
+        // Starting square (-1) → first move lands on 0
+        if (baseSquare == -1)
+            target = delta - 1;
+
+        if (target < 0 || target >= Board.Count)
+            break;
+
+        int cost = (delta * (delta + 1)) / 2;
+        if (player.Carrots < cost)
+            break;
+
+        if (Occupied(target))
+            continue;
+
+        Square targetSquare = Board[target];
+
+        // Forward tortoise forbidden
+        if (targetSquare is TortoiseSquare)
+            continue;
+
+        // Lettuce restriction
+        if (baseSquare >= 0 &&
+            Board[baseSquare] is LettuceSquare &&
+            !player.RequiredToMove)
+        {
+            continue;
+        }
+
+        moves.Add(new Move
+        {
+            SqureTargetIndex = delta,
+            EatCarrots = false
+        });
+
+        if (targetSquare is CarrotSquare)
+        {
+            moves.Add(new Move
+            {
+                SqureTargetIndex = delta,
+                EatCarrots = true
+            });
+        }
+    }
+
+    // Backward tortoise → only if player is on board
+    if (baseSquare >= 0)
+    {
+        int nearestTortoise = GetNearestTortoiseSquare(baseSquare);
+        if (nearestTortoise != -1 && !Occupied(nearestTortoise))
+        {
+            moves.Add(new Move
+            {
+                SqureTargetIndex = nearestTortoise - baseSquare,
+                EatCarrots = false
+            });
+        }
+    }
+
+    return moves;
+}
+
+
     public List<int> GetSquareIndexes<T>(T square) where T : Square
     {
         List<int> indexes = new();
@@ -267,14 +330,16 @@ public class Game
     public void InitializePlayers(int NumberOfPlayers)
     {
 
-        for (int p = 1; p <= NumberOfPlayers; p++)
-        { Players.Add(new PlayerBase((PlayerColor)p)
-                {
-                    Carrots = 1000,
-                    Lettuce = 3
-                }
-                );
-        }
+        // for (int p = 1; p <= NumberOfPlayers; p++)
+        // { Players.Add(new PlayerBase((PlayerColor)p)
+        //         {
+        //             Carrots = 1000,
+        //             Lettuce = 3
+        //         }
+        //         );
+        // }
+        Players.Add(new PlayerBase((PlayerColor.R)) { Carrots = 1000, Lettuce = 3, IsAi = false});
+        Players.Add(new RandomPlayer((PlayerColor.B)) { Carrots = 65, Lettuce = 3, IsAi = true});
     }
 
     private bool Occupied(int Square)

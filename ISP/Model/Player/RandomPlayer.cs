@@ -9,6 +9,10 @@ public class RandomPlayer : PlayerBase
     public override Move move(Game g)
     {
         List<Move> moves = g.possibleMoves();
+        if (moves.Count == 0)
+        {
+            return null;
+        }
         return moves[r.Next(moves.Count)];
     }
 }
