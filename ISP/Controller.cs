@@ -76,6 +76,25 @@ public class Controller
         
         return new Move {SqureTargetIndex = inputedBoxIndex, EatCarrots = eatCarrots };
     }
-    public void GameOver() { }
+    public void GameOver()
+    {
+        int? winnerIndex = game.Winner();
+        if (winnerIndex == null)
+            return;
+        PlayerBase winner = game.Players[winnerIndex.Value];
+        Console.WriteLine();
+        Console.WriteLine("🏁 GAME OVER 🏁");
+        Console.WriteLine($"Winner: {winner.Color}");
+        Console.WriteLine();
+
+        game.UpdateRank();
+
+        foreach (var player in game.Players.OrderBy(p => p.Rank))
+        {
+            Console.WriteLine(
+                $"{player.Rank}. {player.Color} " +
+                $"(Square: {player.CurrentSquare}, Carrots: {player.Carrots})");
+        }
+    }
     
 }
