@@ -24,15 +24,11 @@ public class Game
         PlayerBase player = Players[TurnIndex];
 
         int baseSquare = player.CurrentSquare;
-
-        // Skip round → only noop
         if (player.SkipRound)
         {
             moves.Add(new Move { SqureTargetIndex = 0, EatCarrots = false });
             return moves;
         }
-
-        // Eat carrots in place
         if (baseSquare >= 0 &&
             Board[baseSquare] is CarrotSquare &&
             player.Carrots < 6)
@@ -343,20 +339,30 @@ public class Game
         };
     }
 
-    public void InitializePlayers(int NumberOfPlayers)
+    public void InitializePlayers(int humanCount)
     {
-
-        // for (int p = 1; p <= NumberOfPlayers; p++)
-        // { Players.Add(new PlayerBase((PlayerColor)p)
-        //         {
-        //             Carrots = 1000,
-        //             Lettuce = 3
-        //         }
-        //         );
-        // }
-        Players.Add(new PlayerBase((PlayerColor.R)) { Carrots = 1000, Lettuce = 3, IsAi = false });
-        Players.Add(new RandomPlayer((PlayerColor.B)) { Carrots = 65, Lettuce = 3, IsAi = true });
+        int totalPlayers = 4;
+        int aiCount = totalPlayers - humanCount;
+        for (int i = 0; i < humanCount; i++)
+        {
+            Players.Add(new PlayerBase((PlayerColor)(i + 1))
+            {
+                Carrots = 65,
+                Lettuce = 3,
+                IsAi = false
+            });
+        }
+        for (int i = 0; i < aiCount; i++)
+        {
+            Players.Add(new RandomPlayer((PlayerColor)(humanCount + i + 1))
+            {
+                Carrots = 65,
+                Lettuce = 3,
+                IsAi = true
+            });
+        }
     }
+
 
     private bool Occupied(int Square)
     {
@@ -375,8 +381,6 @@ public class Game
             return false;
 
         Console.WriteLine($"{player.Color} is stuck and must restart!");
-
-        // Remove from board
         if (player.CurrentSquare >= 0)
             Board[player.CurrentSquare].Player = null;
 
@@ -393,6 +397,11 @@ public class Game
     public void PlayTurn()
     {
         PlayerBase player = Players[TurnIndex];
+        if (player.Won)
+        {
+            NextTurn();
+            return;
+        }
         player.RestartedThisTurn = false;
         Console.WriteLine();
         bool stuck = player.Carrots <= 0 || possibleMoves().Count == 0;
@@ -452,7 +461,7 @@ public class Game
         return new Move {SqureTargetIndex = inputedBoxIndex, EatCarrots = eatCarrots };
     }
 
-    private void NextTurn()
+    public void NextTurn()
     {
         TurnIndex = (TurnIndex + 1) % Players.Count;
     }
