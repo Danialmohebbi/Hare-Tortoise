@@ -5,12 +5,6 @@ namespace ConsoleApp2.Squares;
 public class CarrotSquare : Square
 {
     
-    public override Square Clone()
-    {
-        CarrotSquare clone= new CarrotSquare();
-        clone.Player = Player;
-        return clone;
-    }
     public override string ToString()
     {
         string s = Player == null ? "." : $"{Player.Color}";
@@ -28,7 +22,7 @@ public class CarrotSquare : Square
         private int CarrotsRequired = 10;
         public Game State { get; set; }
 
-        public void Execute(PlayerBase player)
+        public void Execute(PlayerBase player, Piece piece)
         {
             if (player.TakeCarrots)
             {

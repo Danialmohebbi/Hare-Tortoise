@@ -2,6 +2,17 @@ using System.Collections;
 using ConsoleApp2.Squares;
 
 namespace ConsoleApp2.Player;
+public class Piece
+{
+    public int PieceIndex { get; set; }
+    public int CurrentSquare { get; set; } = -1;
+    public bool Finished { get; set; } = false;
+
+    public Piece(int index)
+    {
+        PieceIndex = index;
+    }
+}
 
 public class PlayerBase
 {
@@ -16,22 +27,27 @@ public class PlayerBase
     public bool SkipRound { get; set; }
     public bool TakeCarrots { get; set; }
     public int CarrotsUsedLastTurn { get; set; }
-    public bool Won { get; set; }
 
     public virtual Move move(Game game)
     {
         throw new NotImplementedException();
     }
 
-    public int CurrentSquare { get; set; } = -1;
-    
-    private Command command = null;
+    public List<Piece> Pieces { get; } = new()
+    {
+        new Piece(0),
+        new Piece(1)
+    };
 
-    public void ExecuteCommand()
+    public int FinishCount => Pieces.Count(p => p.Finished);
+    
+    private Command? command = null;
+
+    public void ExecuteCommand(Piece piece)
     {
         if (command == null)
             return;
-        command.Execute(this);
+        command.Execute(this,piece);
         command = null;
     }
 
@@ -49,20 +65,6 @@ public class PlayerBase
         return $"{Color} Player" ;
     }
 
-    public PlayerBase Clone()
-    {
-        PlayerBase clone = new PlayerBase(Color);
-        clone.RequiredToMove = RequiredToMove;
-        clone.Carrots = Carrots;
-        clone.Rank = Rank;
-        clone.Lettuce = Lettuce;
-        clone.TakeCarrots = TakeCarrots;
-        clone.SkipRound = SkipRound;
-        clone.Won = Won;
-        clone.CurrentSquare = CurrentSquare;
-        clone.command = command;
-        clone.CarrotsUsedLastTurn = CarrotsUsedLastTurn;
-        return clone;
-    }
+
     
 }

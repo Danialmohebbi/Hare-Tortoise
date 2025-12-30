@@ -17,7 +17,6 @@ public class Controller
     {
         while (game.Winner() == null)
         {
-            Console.WriteLine($"Red Player: {game.Players[0].CurrentSquare}");
             view.DrawPrefix();
             game.PlayTurn();
             view.Draw();Console.WriteLine();
@@ -29,23 +28,38 @@ public class Controller
     
     public void GameOver()
     {
-        int? winnerIndex = game.Winner();
-        if (winnerIndex == null)
-            return;
-        PlayerBase winner = game.Players[winnerIndex.Value];
         Console.WriteLine();
         Console.WriteLine("🏁 GAME OVER 🏁");
-        Console.WriteLine($"Winner: {winner.Color}");
         Console.WriteLine();
+        var winners = game.Players
+            .Where(p => p.FinishCount == 2)
+            .OrderBy(p => p.Rank)
+            .ToList();
+        var remaining = game.Players
+            .Where(p => p.FinishCount < 2)
+            .OrderBy(p => p.Rank)
+            .ToList();
 
-        game.UpdateRank();
-
-        foreach (var player in game.Players.OrderBy(p => p.Rank))
+        Console.WriteLine("🏆 Podium:");
+        foreach (var player in winners)
         {
             Console.WriteLine(
                 $"{player.Rank}. {player.Color} " +
-                $"(Square: {player.CurrentSquare}, Carrots: {player.Carrots})");
+                $"(Finished pieces: {player.FinishCount}, Carrots: {player.Carrots})");
+        }
+
+        if (remaining.Count > 0)
+        {
+            Console.WriteLine();
+            Console.WriteLine("❌ Did Not Finish:");
+            foreach (var player in remaining)
+            {
+                Console.WriteLine(
+                    $"{player.Rank}. {player.Color} " +
+                    $"(Finished pieces: {player.FinishCount}, Carrots: {player.Carrots})");
+            }
         }
     }
+
     
 }

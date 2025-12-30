@@ -4,12 +4,7 @@ namespace ConsoleApp2.Squares;
 
 public class LettuceSquare : Square
 {
-    public override Square Clone()
-    {
-        LettuceSquare clone= new LettuceSquare();
-        clone.Player = Player;
-        return clone;
-    }
+
 
     public override string ToString()
     {
@@ -29,7 +24,7 @@ public class LettuceSquare : Square
         private int CarrotsRequired = 10;
         public Game State { get; set; }
 
-        public void Execute(PlayerBase player)
+        public void Execute(PlayerBase player, Piece piece)
         {
             player.Lettuce--;
             player.Carrots += CarrotsRequired * player.Rank;

@@ -5,12 +5,6 @@ namespace ConsoleApp2.Squares;
 
 public class HareSquare : Square
 {
-    public override Square Clone()
-    {
-        FinalSquare clone= new FinalSquare();
-        clone.Player = Player;
-        return clone;
-    }
     private static List<(HareCard card, int Count)> Cards { get; set; } = new();
     static HareSquare()
     {
@@ -65,12 +59,12 @@ public class HareSquare : Square
 
         public Game State { get; set; }
 
-        public  void Execute(PlayerBase player)
+        public  void Execute(PlayerBase player, Piece piece)
         {
             if (_card != null)
             {
                 _card.SetPlayer(player);
-                _card.Execute(State);
+                _card.Execute(State,piece);
             }
         }
     }

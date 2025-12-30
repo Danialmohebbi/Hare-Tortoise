@@ -5,7 +5,7 @@ namespace ConsoleApp2;
 
 public class Move
 {
-    public int SqureTargetIndex { get; init; }
-    public bool EatCarrots { get; init; }
-
+    public int PieceIndex { get; set; }
+    public int SqureTargetIndex { get; set; }
+    public bool EatCarrots { get; set; }
 }

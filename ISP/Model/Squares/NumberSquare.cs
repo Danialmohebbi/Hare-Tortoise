@@ -6,12 +6,6 @@ namespace ConsoleApp2.Squares;
 public class NumberSquare : Square
 {
     private int Number = 0;
-    public override Square Clone()
-    {
-        NumberSquare clone= new NumberSquare(Number);
-        clone.Player = Player;
-        return clone;
-    }
     public NumberSquare(int number)
     {
         Number = number;
@@ -34,7 +28,7 @@ public class NumberSquare : Square
         public NumberSquareAction(int number) => _number = number;
         public Game State { get; set; }
 
-        public void Execute(PlayerBase player)
+        public void Execute(PlayerBase player, Piece piece)
         {
            if (player.Rank == _number)
                player.Carrots += CarrotsRequired * player.Rank;

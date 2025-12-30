@@ -4,8 +4,8 @@ namespace ConsoleApp2.Squares;
 
 public abstract class Square
 {
+    public Piece OccupyingPiece { get; set; }
     public PlayerBase? Player { get; set; }
     public new abstract string ToString();
     public abstract Command GetCommand(Game state);
-    public abstract Square Clone();
 }

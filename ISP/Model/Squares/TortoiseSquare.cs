@@ -5,12 +5,6 @@ namespace ConsoleApp2.Squares;
 public class TortoiseSquare : Square
 {
     public int moves { get; set; }
-    public override Square Clone()
-    {
-        TortoiseSquare clone= new TortoiseSquare();
-        clone.moves = moves;    
-        return clone;
-    }
     public override string ToString()
     {
         string s = Player == null ? "." : $"{Player.Color}";
@@ -37,7 +31,7 @@ public class TortoiseSquare : Square
 
         public Game State { get; set; }
 
-        public void Execute(PlayerBase player)
+        public void Execute(PlayerBase player, Piece piece)
         {
             player.Carrots += moves * CarrotsRequired;
         }

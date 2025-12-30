@@ -8,7 +8,7 @@ namespace ConsoleApp2.Squares;
 public interface HareCard
 {
     public PlayerBase _player { get; set; }
-    public void Execute(Game state);
+    public void Execute(Game state,Piece piece);
     public void SetPlayer(PlayerBase player);
 }
 
@@ -32,7 +32,7 @@ public class Card1 : HareCard
 
     public PlayerBase _player { get; set; }
 
-    public void Execute(Game state)
+    public void Execute(Game state,Piece piece)
     {
         Console.WriteLine("Hare Card 1 Trigged");
         foreach (var player in state.Players)
@@ -58,7 +58,7 @@ public class Card2 : HareCard
         _player = player;
     }
 
-    public void Execute(Game state)
+    public void Execute(Game state,Piece piece)
     {
         Console.WriteLine("Hare Card 2 Trigged");
 
@@ -81,7 +81,7 @@ public class Card3 : HareCard
         _player = player;
     }
 
-    public void Execute(Game state)
+    public void Execute(Game state,Piece piece)
     {
         Console.WriteLine("Hare Card 3 Trigged");
         if (_player.Carrots != 0)
@@ -99,7 +99,7 @@ public class Card4 : HareCard
         _player = player;
     }
 
-    public void Execute(Game state)
+    public void Execute(Game state,Piece piece)
     {
         Console.WriteLine("Hare Card 4 Trigged");
         _player.Carrots = 65;
@@ -115,7 +115,7 @@ public class Card5 : HareCard
         _player = player;
     }
 
-    public void Execute(Game state)
+    public void Execute(Game state,Piece piece)
     {
         Console.WriteLine("Hare Card 5 Trigged");
         _player.Carrots += _player.CarrotsUsedLastTurn;
@@ -132,7 +132,7 @@ public class Card6 : HareCard
         _player = player;
     }
 
-    public void Execute(Game state)
+    public void Execute(Game state,Piece piece)
     {
         Console.WriteLine("Hare Card 6 Trigged");
         if (_player.Lettuce > 0)
@@ -151,7 +151,7 @@ public class Card7 : HareCard
         _player = player;
     }
 
-    public void Execute(Game state)
+    public void Execute(Game state,Piece piece)
     {
         Console.WriteLine("Hare Card 7 Trigged");
         foreach (PlayerBase player in state.Players)
@@ -171,14 +171,14 @@ public class Card8 : HareCard
         _player = player;
     }
 
-    public void Execute(Game state)
+    public void Execute(Game state,Piece piece)
     {
         Console.WriteLine("Hare Card 8 Trigged");
         List<int> wantedSquares = new();
         for (int i = 0; i < state.Board.Count; i++)
         {
             var s = state.Board[i];
-            if (s.Player == null && i > _player.CurrentSquare && s.GetType() == typeof(CarrotSquare))
+            if (s.Player == null && i > piece.CurrentSquare && s.GetType() == typeof(CarrotSquare))
             {
                 wantedSquares.Add(i);
             }
@@ -186,7 +186,7 @@ public class Card8 : HareCard
 
         if (wantedSquares.Count() > 0)
         {
-            state.Move(new Move { SqureTargetIndex = wantedSquares.OrderBy(x => x).First() - _player.CurrentSquare, EatCarrots = false });
+            state.Move(new Move { PieceIndex = piece.PieceIndex,SqureTargetIndex = wantedSquares.OrderBy(x => x).First() - piece.CurrentSquare, EatCarrots = false });
         }
 
         
