@@ -1,9 +1,29 @@
+using ConsoleApp2.Squares;
+
 namespace ConsoleApp2.View;
 
 public class View
 {
     public required Game g { get; set; }
-
+    void DrawSquare(Square s)
+    {
+        Console.ForegroundColor = GetColor(s);
+        Console.Write(s.ToString());
+        Console.ResetColor();
+    }
+    public ConsoleColor GetColor(Square s)
+    {
+        return s switch
+        {
+            HareSquare => ConsoleColor.Magenta,
+            CarrotSquare => ConsoleColor.DarkYellow,
+            LettuceSquare => ConsoleColor.Green,
+            TortoiseSquare => ConsoleColor.Cyan,
+            FinalSquare => ConsoleColor.White,
+            NumberSquare => ConsoleColor.Gray,
+            _ => ConsoleColor.DarkGray
+        };
+    }
     public void Draw()
     { 
         for (int i = 2; i <= 8; i++)

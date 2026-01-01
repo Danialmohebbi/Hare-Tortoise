@@ -1,3 +1,5 @@
+using ConsoleApp2.Rules;
+
 namespace ConsoleApp2.Player;
 
 public class RandomPlayer : PlayerBase
@@ -6,13 +8,12 @@ public class RandomPlayer : PlayerBase
 
     public RandomPlayer(PlayerColor color) : base(color) { }
     
-    public override Move move(Game g)
+    public override Move move(Game game)
     {
-        List<Move> moves = g.possibleMoves();
-        if (moves.Count == 0)
-        {
-            return null;
-        }
-        return moves[r.Next(moves.Count)];
+        var moves = MoveGenerator.GetLegalMoves(game, this);
+        return moves.Count == 0
+            ? null
+            : moves[Random.Shared.Next(moves.Count)];
     }
+
 }

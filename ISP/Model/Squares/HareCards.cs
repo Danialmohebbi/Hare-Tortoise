@@ -186,7 +186,7 @@ public class Card8 : HareCard
 
         if (wantedSquares.Count() > 0)
         {
-            state.Move(new Move { PieceIndex = piece.PieceIndex,SqureTargetIndex = wantedSquares.OrderBy(x => x).First() - piece.CurrentSquare, EatCarrots = false });
+            state.TryApplyMove(new Move { PieceIndex = piece.PieceIndex,Delta = wantedSquares.OrderBy(x => x).First() - piece.CurrentSquare, EatCarrots = false });
         }
 
         

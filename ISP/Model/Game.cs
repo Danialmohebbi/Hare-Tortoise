@@ -1,4 +1,5 @@
 using ConsoleApp2.Player;
+using ConsoleApp2.Rules;
 using ConsoleApp2.Squares;
 
 namespace ConsoleApp2;
@@ -18,86 +19,6 @@ public class Game
 
 
 
-    public List<Move> possibleMoves()
-    {
-        List<Move> moves = new();
-        PlayerBase player = Players[TurnIndex];
-
-        for (int i = 0; i < player.Pieces.Count; i++)
-        {
-            Piece piece = player.Pieces[i];
-            if (piece.Finished) continue;
-            int baseSquare = piece.CurrentSquare;
-            if (player.SkipRound)
-            {
-                moves.Add(new Move { PieceIndex = i,SqureTargetIndex = 0, EatCarrots = false });
-                return moves;
-            }
-            if (baseSquare >= 0 &&
-                Board[baseSquare] is CarrotSquare)
-            {
-                moves.Add(new Move { PieceIndex = i,SqureTargetIndex = 0, EatCarrots = true });
-            }
-
-            for (int delta = 1;; delta++)
-            {
-                int target = baseSquare + delta;
-                if (baseSquare == -1)
-                    target = delta - 1;
-
-                if (target < 0 || target >= Board.Count)
-                    break;
-
-                int cost = (delta * (delta + 1)) / 2;
-                if (player.Carrots < cost)
-                    break;
-
-                if (Occupied(target))
-                    continue;
-
-                Square targetSquare = Board[target];
-                if (targetSquare is TortoiseSquare)
-                    continue;
-                if (baseSquare >= 0 &&
-                    Board[baseSquare] is LettuceSquare &&
-                    !player.RequiredToMove)
-                {
-                    continue;
-                }
-
-                moves.Add(new Move
-                {
-                    PieceIndex = i,
-                    SqureTargetIndex = delta,
-                    EatCarrots = false
-                });
-
-                if (targetSquare is CarrotSquare)
-                {
-                    moves.Add(new Move
-                    {
-                        PieceIndex = i,
-                        SqureTargetIndex = delta,
-                        EatCarrots = true
-                    });
-                }
-            }
-            if (baseSquare >= 0)
-            {
-                int nearestTortoise = GetNearestTortoiseSquare(baseSquare);
-                if (nearestTortoise != -1 && !Occupied(nearestTortoise))
-                {
-                    moves.Add(new Move
-                    {
-                        PieceIndex = i,
-                        SqureTargetIndex = nearestTortoise - baseSquare,
-                        EatCarrots = false
-                    });
-                }
-            }
-        }
-        return moves;
-    }
     private bool AskHumanToReset(PlayerBase player)
     {
         Console.WriteLine($"{player.Color} is stuck!");
@@ -131,123 +52,41 @@ public class Game
     }
     
 
-    public bool Move(Move _move)
+    private void ApplyMove(Move move)
     {
         var player = Players[TurnIndex];
-        var piece = player.Pieces[_move.PieceIndex];
-        int squareTargetIndex = _move.SqureTargetIndex + piece.CurrentSquare;
-        bool EatCarrots = _move.EatCarrots;
-        bool movingAway = piece.CurrentSquare != squareTargetIndex;
+        var piece = player.Pieces[move.PieceIndex];
 
-        if (_move.SqureTargetIndex == 0 && squareTargetIndex == piece.CurrentSquare && _move.EatCarrots)
+        int from = piece.CurrentSquare;
+        int to = from + move.Delta;
+        if (move.Delta == 0 && move.EatCarrots)
         {
             player.Carrots += 10;
-            return true;
+            return;
         }
 
-        if (Occupied(squareTargetIndex))
+        Square currentSquare = from == -1 ? null : Board[from];
+        Square targetSquare = Board[to];
+
+        int cost = (Math.Abs(move.Delta) * (Math.Abs(move.Delta) + 1)) / 2;
+        player.Carrots -= cost;
+
+        if (currentSquare != null)
         {
-            Console.WriteLine("The square you have chosen is already occupied!");
-            return false;
+            currentSquare.Player = null;
+            currentSquare.OccupyingPiece = null;
         }
 
+        piece.CurrentSquare = to;
+        targetSquare.Player = player;
+        targetSquare.OccupyingPiece = piece;
 
+        player.SetCommand(targetSquare.GetCommand(this));
+        player.ExecuteCommand(piece);
 
-        if (squareTargetIndex >= Board.Count ||
-            squareTargetIndex < piece.CurrentSquare && typeof(TortoiseSquare) != Board[squareTargetIndex].GetType())
-        {
-            Console.WriteLine(squareTargetIndex);
-            Console.WriteLine("Please enter a valid number of moves to play");
-            return false;
-        }
-
-        Square currentSquare = piece.CurrentSquare == -1 ? null : Board[piece.CurrentSquare];
-        Square targetSquare = Board[squareTargetIndex];
-
-
-
-        if (player.SkipRound)
-        {
-            Console.WriteLine("HEY NUMBER 1");
-            player.SkipRound = false;
-            return true;
-        }
-
-        if (currentSquare != null && currentSquare.GetType() == typeof(NumberSquare) && movingAway)
-            player.ExecuteCommand(piece);
-        else if (currentSquare != null && currentSquare.GetType() == typeof(LettuceSquare) && !player.RequiredToMove)
-        {
-            Console.WriteLine("HEY NUMBER 2");
-            player.ExecuteCommand(piece);
-            if (movingAway)
-                Console.WriteLine("You are not allowed to move while chewwing on food. it's Dangerous!");
-            return true;
-        }
-        else if (currentSquare != null && currentSquare.GetType() == typeof(CarrotSquare) && !movingAway)
-        {
-            player.TakeCarrots = EatCarrots;
-            player.ExecuteCommand(piece);
-            player.SetCommand(currentSquare.GetCommand(this));
-        }
-
-
-        int move = int.Abs((piece.CurrentSquare == -1 ? 0 : piece.CurrentSquare) - squareTargetIndex);
-        int cost = (move * (move + 1)) / 2;
-        if (player.Carrots >= cost && movingAway)
-        {
-            if (targetSquare.GetType() == typeof(TortoiseSquare) && piece.CurrentSquare < squareTargetIndex)
-            {
-                Console.WriteLine("The square you have chosen can only be moved to backwardly!");
-                return false;
-            }
-
-            if (targetSquare.GetType() == typeof(TortoiseSquare) && piece.CurrentSquare > squareTargetIndex
-                                                                 && targetSquare.Player == null
-                                                                 && squareTargetIndex < piece.CurrentSquare
-                                                                 && GetNearestTortoiseSquare(piece.CurrentSquare) ==
-                                                                 squareTargetIndex)
-            {
-                (targetSquare as TortoiseSquare).SetMoves(move);
-                player.SetCommand(targetSquare.GetCommand(this));
-                currentSquare.Player = null;
-                currentSquare.OccupyingPiece = null;
-                targetSquare.Player = player;
-                targetSquare.OccupyingPiece = piece;
-                piece.CurrentSquare = squareTargetIndex;
-            }
-            else
-            {
-                player.Carrots -= cost;
-                if (currentSquare != null) currentSquare.Player = null;
-
-                piece.CurrentSquare = squareTargetIndex;
-                targetSquare.Player = player;
-                targetSquare.OccupyingPiece = piece;
-                player.SetCommand(targetSquare.GetCommand(this));
-                player.RequiredToMove = false;
-                player.CarrotsUsedLastTurn = cost;
-            }
-
-            if ((targetSquare.GetType() == typeof(HareSquare)
-                 || targetSquare.GetType() == typeof(TortoiseSquare)
-                 || targetSquare.GetType() == typeof(FinalSquare)))
-            {
-                player.ExecuteCommand(piece);
-            }
-
-            UpdateRank();
-            Console.WriteLine("HEY NUMBER 3");
-            return true;
-        }
-        else if (player.Carrots < cost)
-        {
-            player.RequiredToMove = false;
-            player.SkipRound = true;  
-            return false;
-        }
-
-        return false;
+        UpdateRank();
     }
+
 
     public void UpdateRank()
     {
@@ -366,7 +205,7 @@ public class Game
     }
 
 
-    private bool Occupied(int Square)
+    public bool Occupied(int Square)
     {
         foreach (PlayerBase p in Players)
         {
@@ -396,7 +235,7 @@ public class Game
 
     public void PlayTurn()
     {
-        PlayerBase player = Players[TurnIndex];
+        var player = Players[TurnIndex];
 
         if (player.FinishCount == 2)
         {
@@ -404,159 +243,65 @@ public class Game
             return;
         }
 
-        player.RestartedThisTurn = false;
-        Console.WriteLine();
+        var legalMoves = MoveGenerator.GetLegalMoves(this, player);
 
-        bool stuck = player.Carrots <= 0 || possibleMoves().Count == 0;
-
-        if (stuck && !player.IsAi)
-        {
-            bool wantsReset = AskHumanToReset(player);
-
-            if (!wantsReset)
-            {
-                Console.WriteLine($"{player.Color} chooses not to move.");
-                NextTurn();
-                return;
-            }
-        }
-        if (stuck)
+        if (legalMoves.Count == 0)
         {
             HandleStuckPlayer(player);
-
-            if (possibleMoves().Count == 0)
-            {
-                Console.WriteLine($"{player.Color} still cannot move. Turn skipped.");
-                NextTurn();
-                return;
-            }
+            NextTurn();
+            return;
         }
-        
-        List<Move> legalMoves = possibleMoves();
 
-        while (true)
+        Move move;
+        do
         {
-            if (legalMoves.Count == 0)
-            {
-                Console.WriteLine($"{player.Color} has no legal moves.");
-                break;
-            }
-
-            Move move;
-
-            if (player.IsAi)
-            {
-                move = player.move(this);
-
-                if (!legalMoves.Any(m =>
-                        m.PieceIndex == move.PieceIndex &&
-                        m.SqureTargetIndex == move.SqureTargetIndex &&
-                        m.EatCarrots == move.EatCarrots))
-                {
-                    legalMoves.RemoveAll(m =>
-                        m.PieceIndex == move.PieceIndex &&
-                        m.SqureTargetIndex == move.SqureTargetIndex &&
-                        m.EatCarrots == move.EatCarrots);
-
-                    continue;
-                }
-            }
-            else
-            {
-                move = ReadHumanMove();
-
-                if (move == null)
-                {
-                    Console.WriteLine("Invalid input. Please try again.");
-                    continue;
-                }
-                
-            }
-            if (Move(move))
-            {
-                break;
-            }
-            legalMoves.RemoveAll(m =>
-                m.PieceIndex == move.PieceIndex &&
-                m.SqureTargetIndex == move.SqureTargetIndex &&
-                m.EatCarrots == move.EatCarrots);
+            move = player.IsAi ? player.move(this) : ReadHumanMove();
         }
+        while (move == null || !TryApplyMove(move));
 
         NextTurn();
     }
 
 
-private Move? ReadHumanMove()
-{
-    PlayerBase player = Players[TurnIndex];
-    Console.WriteLine("Choose piece:");
-    for (int i = 0; i < player.Pieces.Count; i++)
+    private Move ReadHumanMove()
     {
-        var pc = player.Pieces[i];
-        string pos = pc.CurrentSquare == -1 ? "Start" : pc.CurrentSquare.ToString();
-        Console.WriteLine($"{i} - Piece at {pos}");
-    }
+        var player = Players[TurnIndex];
+        var legalMoves = MoveGenerator.GetLegalMoves(this, player);
 
-    if (!int.TryParse(Console.ReadLine(), out int pieceIndex) ||
-        pieceIndex < 0 || pieceIndex >= player.Pieces.Count)
-    {
-        return null;
-    }
+        Console.WriteLine("Choose a move:");
+        for (int i = 0; i < legalMoves.Count; i++)
+        {
+            Console.WriteLine($"{i} - {legalMoves[i].Describe(this, player)}");
+        }
 
-    Piece piece = player.Pieces[pieceIndex];
-    int baseSquare = piece.CurrentSquare;
-    bool eatCarrots = false;
-    if (baseSquare >= 0 && Board[baseSquare] is CarrotSquare)
-    {
-        Console.WriteLine("Do you want to move? [YES/NO]");
-        string input = Console.ReadLine()!.Trim().ToUpper();
-        
-        if (input == "YES")
-        {
-            eatCarrots = false;
-        }
-        else if (input == "NO")
-        {
-            eatCarrots = true;
-            return new Move() { EatCarrots = eatCarrots, SqureTargetIndex = 0 ,PieceIndex = pieceIndex};
-        }
-        else
-        {
+        if (!int.TryParse(Console.ReadLine(), out int choice))
             return null;
-        }
+
+        if (choice < 0 || choice >= legalMoves.Count)
+            return null;
+
+        return legalMoves[choice];
     }
 
-    Console.WriteLine("Please enter the box you wish to move to:");
 
-    if (!int.TryParse(Console.ReadLine(), out int targetSquare))
-    {
-        return null;
-    }
-
-    int delta;
-
-    if (baseSquare == -1)
-    {
-        delta = targetSquare + 1;
-    }
-    else
-    {
-        delta = targetSquare;
-    }
-
-    return new Move
-    {
-        PieceIndex = pieceIndex,
-        SqureTargetIndex = delta,
-        EatCarrots = eatCarrots
-    };
-}
 
     public void NextTurn()
     {
         TurnIndex = (TurnIndex + 1) % Players.Count;
     }
 
+    public bool TryApplyMove(Move move)
+    {
+        var legal = MoveGenerator.GetLegalMoves(this, Players[TurnIndex]);
+
+        if (!legal.Any(m => move.PieceIndex == m.PieceIndex
+                            &&   move.EatCarrots == m.EatCarrots
+                            &&   move.Delta == m.Delta))   
+            return false;
+
+        ApplyMove(move);
+        return true;
+    }
 
 
     public int GetNearestTortoiseSquare(int Square)

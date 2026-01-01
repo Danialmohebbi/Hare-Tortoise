@@ -30,11 +30,11 @@ public class CarrotSquare : Square
             }
             else
             {
-                if (player.Carrots < 10)
+                if (player.Carrots > 10)
                 {
-                    throw new Exception();
+                    player.Carrots -= CarrotsRequired;
                 }
-                player.Carrots -= CarrotsRequired;
+                
             }
                 
         }

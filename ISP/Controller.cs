@@ -17,11 +17,16 @@ public class Controller
     {
         while (game.Winner() == null)
         {
+            Console.Clear();
+
             view.DrawPrefix();
-            game.PlayTurn();
-            view.Draw();Console.WriteLine();
+            view.Draw();
+            Console.WriteLine();
             view.DrawPostfix();
+
+            game.PlayTurn();
         }
+
         
         GameOver();
     }
@@ -40,7 +45,7 @@ public class Controller
             .OrderBy(p => p.Rank)
             .ToList();
 
-        Console.WriteLine("🏆 Podium:");
+        Console.WriteLine("🏆 Winner:");
         foreach (var player in winners)
         {
             Console.WriteLine(
