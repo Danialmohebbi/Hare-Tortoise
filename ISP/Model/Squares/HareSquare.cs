@@ -2,7 +2,14 @@ using ConsoleApp2.Player;
 
 namespace ConsoleApp2.Squares;
 
-
+/// <summary>
+/// Represents a Hare square on the board.
+///
+/// When a piece lands on a HareSquare, a HareCard is drawn
+/// and executed immediately. Hare cards introduce random
+/// events that often disadvantage leading players and
+/// benefit players who are behind.
+/// </summary>
 public class HareSquare : Square
 {
     private static List<(HareCard card, int Count)> Cards { get; set; } = new();

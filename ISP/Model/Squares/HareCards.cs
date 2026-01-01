@@ -4,25 +4,17 @@ using System.Linq;
 using ConsoleApp2.Player;
 
 namespace ConsoleApp2.Squares;
-
+/// <summary>
+/// Represents a Hare card that can be drawn when a piece lands on a HareSquare.
+///
+/// Hare cards introduce random events.
+/// </summary>
 public interface HareCard
 {
     public PlayerBase _player { get; set; }
     public void Execute(Game state,Piece piece);
     public void SetPlayer(PlayerBase player);
 }
-
-public static class HareCardExtensions
-{
-    public static HareCard Clone(this HareCard card)
-    {
-        HareCard c = (HareCard)Activator.CreateInstance(card.GetType())!;
-        c.SetPlayer(card._player);
-        return c;
-    }
-}
-
-
 public class Card1 : HareCard
 {
     public void SetPlayer(PlayerBase player)

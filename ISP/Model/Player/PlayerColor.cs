@@ -1,5 +1,7 @@
 namespace ConsoleApp2.Player;
-
+/// <summary>
+/// Represents the unique identity and display color of a player.
+/// </summary>
 public enum PlayerColor
 {
     R = 1,

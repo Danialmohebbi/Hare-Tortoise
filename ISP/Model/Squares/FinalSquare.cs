@@ -1,7 +1,15 @@
 using ConsoleApp2.Player;
 
 namespace ConsoleApp2.Squares;
-
+/// <summary>
+/// Represents a Final square on the board.
+///
+/// When a piece lands on a FinalSquare:
+/// - The piece is marked as finished
+/// - It is removed from the board
+/// - The owning player's finish count is updated elsewhere
+///
+/// /// </summary>
 public class FinalSquare : Square
 {
     public override string ToString()

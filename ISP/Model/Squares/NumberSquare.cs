@@ -2,7 +2,12 @@ using System.Runtime.CompilerServices;
 using ConsoleApp2.Player;
 
 namespace ConsoleApp2.Squares;
-
+/// <summary>
+/// Represents a Number square on the board.
+///
+/// A NumberSquare rewards a player if their current rank
+/// matches the number printed on the square.
+/// </summary>
 public class NumberSquare : Square
 {
     private int Number = 0;
@@ -13,7 +18,7 @@ public class NumberSquare : Square
     public override string ToString()
     {
         string s = Player == null ? "." : $"{Player.Color}";
-        return $"[N,{s}]";    }
+        return $"[N{Number},{s}]";    }
 
     public override Command GetCommand(Game state)
     {

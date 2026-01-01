@@ -2,6 +2,9 @@ using System.Collections;
 using ConsoleApp2.Squares;
 
 namespace ConsoleApp2.Player;
+/// <summary>
+/// Represents a single playing piece belonging to a player.
+/// </summary>
 public class Piece
 {
     public int PieceIndex { get; set; }
@@ -13,7 +16,9 @@ public class Piece
         PieceIndex = index;
     }
 }
-
+/// <summary>
+/// Base class representing a player in the game.
+/// </summary>
 public class PlayerBase
 {
     public PlayerColor Color { get; init; }

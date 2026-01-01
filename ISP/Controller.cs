@@ -2,17 +2,41 @@ using ConsoleApp2.Player;
 using ConsoleApp2.Squares;
 
 namespace ConsoleApp2;
-
+/// <summary>
+/// Controller is responsible for:
+///  - Running the main game loop
+///  - Coordinating Game and View
+///  - Determining when the game ends
+///
+/// </summary>
 public class Controller
 {
-    Game game;
-    View.View view;
+    /// <summary>
+    /// Core game state and rules.
+    /// </summary>
+    private readonly Game game;
+    
+    /// <summary>
+    /// View responsible for all console input/output.
+    /// </summary>
+    private readonly View.View view;
 
-    public Controller(Game game)
+    /// <summary>
+    /// Creates a controller with explicit dependencies.
+    /// This allows easy testing and clear separation of concerns.
+    /// </summary>
+    /// <param name="game">Game logic and state</param>
+    /// <param name="view">rendering and input</param>
+    public Controller(Game game, View.View view)
     {
         this.game = game;
-        view = new View.View{ g = game };
+        this.view = view;
 }
+    /// <summary>
+    /// Runs the main game loop.
+    /// The loop continues until at least one player has
+    /// finished both of their pieces.
+    /// </summary>
     public void Run()
     {
         while (game.Winner() == null)
@@ -26,45 +50,7 @@ public class Controller
 
             game.PlayTurn();
         }
-
         
-        GameOver();
+        view.GameOver();
     }
-    
-    public void GameOver()
-    {
-        Console.WriteLine();
-        Console.WriteLine("🏁 GAME OVER 🏁");
-        Console.WriteLine();
-        var winners = game.Players
-            .Where(p => p.FinishCount == 2)
-            .OrderBy(p => p.Rank)
-            .ToList();
-        var remaining = game.Players
-            .Where(p => p.FinishCount < 2)
-            .OrderBy(p => p.Rank)
-            .ToList();
-
-        Console.WriteLine("🏆 Winner:");
-        foreach (var player in winners)
-        {
-            Console.WriteLine(
-                $"{player.Rank}. {player.Color} " +
-                $"(Finished pieces: {player.FinishCount}, Carrots: {player.Carrots})");
-        }
-
-        if (remaining.Count > 0)
-        {
-            Console.WriteLine();
-            Console.WriteLine("❌ Did Not Finish:");
-            foreach (var player in remaining)
-            {
-                Console.WriteLine(
-                    $"{player.Rank}. {player.Color} " +
-                    $"(Finished pieces: {player.FinishCount}, Carrots: {player.Carrots})");
-            }
-        }
-    }
-
-    
 }
