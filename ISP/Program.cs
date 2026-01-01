@@ -8,7 +8,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        int humanPlayers = AskHumanPlayers();
+        int humanPlayers = View.View.AskHumanPlayers();
 
         Game game = new Game(humanPlayers);
         Controller controller = new Controller(game);
@@ -16,21 +16,5 @@ class Program
         controller.Run();
     }
 
-    static int AskHumanPlayers()
-    {
-        Console.WriteLine("How many human players? (1–4)");
 
-        while (true)
-        {
-            string input = Console.ReadLine();
-
-            if (int.TryParse(input, out int count) &&
-                count >= 1 && count <= 4)
-            {
-                return count;
-            }
-
-            Console.WriteLine("Invalid input. Please enter a number between 1 and 4.");
-        }
-    }
 }
