@@ -26,7 +26,7 @@ public class Card1 : HareCard
 
     public void Execute(Game state,Piece piece)
     {
-        Console.WriteLine("Hare Card 1 Trigged");
+        Console.WriteLine("Aid the Tortoise Trigged");
         foreach (var player in state.Players)
         {
             if (player.Rank == 0)
@@ -52,7 +52,7 @@ public class Card2 : HareCard
 
     public void Execute(Game state,Piece piece)
     {
-        Console.WriteLine("Hare Card 2 Trigged");
+        Console.WriteLine("Change of Pace Trigged");
 
         int behindPlayer = state.Players.FindAll(p => p.Rank < _player.Rank && p.Rank != 0).Count;
         int afterPlayer = state.Players.FindAll(p => p.Rank > _player.Rank && p.Rank != 0).Count;
@@ -75,7 +75,7 @@ public class Card3 : HareCard
 
     public void Execute(Game state,Piece piece)
     {
-        Console.WriteLine("Hare Card 3 Trigged");
+        Console.WriteLine("Overconfidence Trigged");
         if (_player.Carrots != 0)
             _player.Carrots /= 2;
     }
@@ -93,7 +93,7 @@ public class Card4 : HareCard
 
     public void Execute(Game state,Piece piece)
     {
-        Console.WriteLine("Hare Card 4 Trigged");
+        Console.WriteLine("Back to Basics Trigged");
         _player.Carrots = 65;
     }
 }
@@ -109,7 +109,7 @@ public class Card5 : HareCard
 
     public void Execute(Game state,Piece piece)
     {
-        Console.WriteLine("Hare Card 5 Trigged");
+        Console.WriteLine("Refund Trigged");
         _player.Carrots += _player.CarrotsUsedLastTurn;
         _player.CarrotsUsedLastTurn = 0;
     }
@@ -126,7 +126,7 @@ public class Card6 : HareCard
 
     public void Execute(Game state,Piece piece)
     {
-        Console.WriteLine("Hare Card 6 Trigged");
+        Console.WriteLine("Salad or Starve Trigged");
         if (_player.Lettuce > 0)
             _player.Carrots += _player.Lettuce * 10;
         else
@@ -145,7 +145,7 @@ public class Card7 : HareCard
 
     public void Execute(Game state,Piece piece)
     {
-        Console.WriteLine("Hare Card 7 Trigged");
+        Console.WriteLine("Redistribution Trigged");
         foreach (PlayerBase player in state.Players)
         {
             _player.Carrots += 2;
@@ -165,7 +165,7 @@ public class Card8 : HareCard
 
     public void Execute(Game state,Piece piece)
     {
-        Console.WriteLine("Hare Card 8 Trigged");
+        Console.WriteLine("Leap Ahead Trigged");
         List<int> wantedSquares = new();
         for (int i = 0; i < state.Board.Count; i++)
         {
