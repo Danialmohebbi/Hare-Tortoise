@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using ConsoleApp2.Player;
 using ConsoleApp2.Rules;
 using ConsoleApp2.Squares;

@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using ConsoleApp2.Squares;
 
 namespace ConsoleApp2.View;
