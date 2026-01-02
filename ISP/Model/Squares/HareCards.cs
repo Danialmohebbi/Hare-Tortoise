@@ -15,6 +15,7 @@ public interface HareCard
     public void Execute(Game state,Piece piece);
     public void SetPlayer(PlayerBase player);
 }
+//Aid the Tortoise
 public class Card1 : HareCard
 {
     public void SetPlayer(PlayerBase player)
@@ -26,7 +27,6 @@ public class Card1 : HareCard
 
     public void Execute(Game state,Piece piece)
     {
-        Console.WriteLine("Aid the Tortoise Trigged");
         foreach (var player in state.Players)
         {
             if (player.Rank == 0)
@@ -39,8 +39,7 @@ public class Card1 : HareCard
     }
     
 }
-
-
+//Change of Pace
 public class Card2 : HareCard
 {
     public PlayerBase _player { get; set; }
@@ -52,8 +51,6 @@ public class Card2 : HareCard
 
     public void Execute(Game state,Piece piece)
     {
-        Console.WriteLine("Change of Pace Trigged");
-
         int behindPlayer = state.Players.FindAll(p => p.Rank < _player.Rank && p.Rank != 0).Count;
         int afterPlayer = state.Players.FindAll(p => p.Rank > _player.Rank && p.Rank != 0).Count;
         if (behindPlayer < afterPlayer)
@@ -63,7 +60,7 @@ public class Card2 : HareCard
 
     }
 }
-
+//Overconfidence
 public class Card3 : HareCard
 {
     public PlayerBase _player { get; set; }
@@ -75,12 +72,11 @@ public class Card3 : HareCard
 
     public void Execute(Game state,Piece piece)
     {
-        Console.WriteLine("Overconfidence Trigged");
         if (_player.Carrots != 0)
             _player.Carrots /= 2;
     }
 }
-
+//Back to Basics
 public class Card4 : HareCard
 {
 
@@ -93,11 +89,10 @@ public class Card4 : HareCard
 
     public void Execute(Game state,Piece piece)
     {
-        Console.WriteLine("Back to Basics Trigged");
         _player.Carrots = 65;
     }
 }
-
+//Refund
 public class Card5 : HareCard
 {
     public PlayerBase _player { get; set; }
@@ -109,12 +104,11 @@ public class Card5 : HareCard
 
     public void Execute(Game state,Piece piece)
     {
-        Console.WriteLine("Refund Trigged");
         _player.Carrots += _player.CarrotsUsedLastTurn;
         _player.CarrotsUsedLastTurn = 0;
     }
 }
-
+//Salad or Starve
 public class Card6 : HareCard
 {
     public PlayerBase _player { get; set; }
@@ -126,14 +120,13 @@ public class Card6 : HareCard
 
     public void Execute(Game state,Piece piece)
     {
-        Console.WriteLine("Salad or Starve Trigged");
         if (_player.Lettuce > 0)
             _player.Carrots += _player.Lettuce * 10;
         else
             _player.SkipRound = true;
     }
 }
-
+//Redistribution
 public class Card7 : HareCard
 {
     public PlayerBase _player { get; set; }
@@ -145,7 +138,6 @@ public class Card7 : HareCard
 
     public void Execute(Game state,Piece piece)
     {
-        Console.WriteLine("Redistribution Trigged");
         foreach (PlayerBase player in state.Players)
         {
             _player.Carrots += 2;
@@ -153,7 +145,7 @@ public class Card7 : HareCard
         }
     }
 }
-
+//Leap Ahead
 public class Card8 : HareCard
 {
     public PlayerBase _player { get; set; }
@@ -165,7 +157,6 @@ public class Card8 : HareCard
 
     public void Execute(Game state,Piece piece)
     {
-        Console.WriteLine("Leap Ahead Trigged");
         List<int> wantedSquares = new();
         for (int i = 0; i < state.Board.Count; i++)
         {

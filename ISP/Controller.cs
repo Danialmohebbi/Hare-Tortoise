@@ -7,7 +7,6 @@ namespace ConsoleApp2;
 ///  - Running the main game loop
 ///  - Coordinating Game and View
 ///  - Determining when the game ends
-///
 /// </summary>
 public class Controller
 {
@@ -23,7 +22,7 @@ public class Controller
 
     /// <summary>
     /// Creates a controller with explicit dependencies.
-    /// This allows easy testing and clear separation of concerns.
+    /// This allows for change of view and game via dependency injection.
     /// </summary>
     /// <param name="game">Game logic and state</param>
     /// <param name="view">rendering and input</param>
@@ -34,7 +33,7 @@ public class Controller
 }
     /// <summary>
     /// Runs the main game loop.
-    /// The loop continues until at least one player has
+    /// The loop continues until a player has
     /// finished both of their pieces.
     /// </summary>
     public void Run()

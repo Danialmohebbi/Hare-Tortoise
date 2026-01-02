@@ -6,7 +6,7 @@ namespace ConsoleApp2.Squares;
 ///
 /// Carrot squares allow a player to either:
 /// - Eat carrots (gain carrots and stay on the square)
-/// - Move away and potentially lose carrots, depending on game rules
+/// - Move away
 /// </summary>
 public class CarrotSquare : Square
 {

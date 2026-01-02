@@ -22,7 +22,6 @@ public class Piece
 public class PlayerBase
 {
     public PlayerColor Color { get; init; }
-    public bool RestartedThisTurn { get; set; }
 
     public bool IsAi { get; set; }
     public bool RequiredToMove { get; set; }

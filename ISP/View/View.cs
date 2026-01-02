@@ -102,7 +102,7 @@ public class View
     }
     /// <summary>
     /// Displays the current player information before a turn begins.
-    /// Acts as a simple HUD (heads-up display).
+    /// Acts as a simple HUD.
     /// </summary>
     public void DrawPrefix()
     {
@@ -120,25 +120,19 @@ public class View
     }
     /// <summary>
     /// Asks the user how many human players will participate.
-    /// 
     /// Valid input range: 1–4.
     /// Remaining players will be controlled by AI.
-    /// 
-    /// This method is static because it is used
-    /// before a Game instance is created.
     /// </summary>
     /// <returns>The number of human players</returns>
     public static int AskHumanPlayers()
     {
         Console.WriteLine("How many human players? (1–4)");
-
         while (true)
         {
             string input = Console.ReadLine();
 
             if (int.TryParse(input, out int count) &&
-                count >= 1 && count <= 4)
-            {
+                count >= 1 && count <= 4) {
                 return count;
             }
 

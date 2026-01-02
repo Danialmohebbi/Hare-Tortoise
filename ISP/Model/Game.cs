@@ -79,7 +79,7 @@ public class Game
     {
         var ranked = Players
             .OrderByDescending(p => p.FinishCount)
-            .ThenByDescending(p => p.Pieces.Max(pc => pc.CurrentSquare))
+            .ThenBy(p => p.Pieces.Max(pc => pc.CurrentSquare))
             .ToList();
 
         for (int i = 0; i < ranked.Count; i++)
@@ -252,8 +252,7 @@ public class Game
         }
 
         Move move;
-        do
-        {
+        do {
             move = player.IsAi ? player.move(this) : ReadHumanMove();
         }
         while (move == null || !TryApplyMove(move));
